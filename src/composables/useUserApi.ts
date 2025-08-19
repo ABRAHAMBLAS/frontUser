@@ -10,12 +10,12 @@ export const useUserApi = () => {
   const error = ref<string | null>(null);
 
   // Obtener todos los usuarios
-  const getUsers = async (page: number = 1) => {
+  const getUsers = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.get(`http://localhost:8000/api/users?page=${page}`);
-      users.value = response.data.data; // Usamos 'data' si estás paginando
+      const response = await axios.get(`http://localhost:8000/api/users`);
+      users.value = response.data; // Usamos 'data' si estás paginando
     } catch (err) {
       error.value = 'Error al obtener usuarios';
     } finally {
@@ -23,27 +23,16 @@ export const useUserApi = () => {
     }
   };
 
-  // Obtener un solo usuario por ID
-  const getUser = async (id: number) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await axios.get(`http://localhost:8000/api/users/${id}`);
-      user.value = response.data.user;
-    } catch (err) {
-      error.value = 'Error al obtener el usuario';
-    } finally {
-      loading.value = false;
-    }
-  };
+
 
   // Crear un nuevo usuario
   const createUser = async (newUser: Omit<User, 'id'>) => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.post('http://localhost/api/users', newUser);
+      const response = await axios.post('http://localhost:8000/api/store', newUser);
       users.value.push(response.data.items); // Agregamos el nuevo usuario a la lista
+       alert('Usuario creado exitosamente'); 
     } catch (err) {
       error.value = 'Error al crear usuario';
     } finally {
@@ -56,7 +45,7 @@ export const useUserApi = () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.put(`http://localhost/api/users/${id}`, updatedUser);
+      const response = await axios.put(`http://localhost:8000/api/update/${id}`, updatedUser);
       const index = users.value.findIndex((user) => user.id === id);
       if (index !== -1) {
         users.value[index] = response.data.user;
@@ -72,13 +61,6 @@ export const useUserApi = () => {
  const deleteUser = async (id: number) => {
   loading.value = true;
   error.value = null;
-
-  // Confirmación antes de eliminar el usuario
-  const confirmed = window.confirm('¿Estás seguro de que deseas eliminar este usuario?');
-  if (!confirmed) {
-    loading.value = false;
-    return;  // No hacer nada si no fue confirmado
-  }
 
   try {
     // Enviar solicitud DELETE a la API
@@ -116,7 +98,6 @@ export const useUserApi = () => {
     loading,
     error,
     getUsers,
-    getUser,
     createUser,
     updateUser,
     deleteUser

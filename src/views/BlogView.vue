@@ -4,7 +4,7 @@
 
     <!-- Filtro de búsqueda -->
     <input
-      v-model="search"
+      v-model="buscar"
       type="text"
       placeholder="Buscar..."
       class="search-box"
@@ -56,7 +56,7 @@ const datos = ref([
 ])
 
 // Parámetros de la tabla
-const search = ref('')
+const buscar = ref('')
 const sortKey = ref('')
 const sortAsc = ref(true)
 const paginaActual = ref(1)
@@ -76,8 +76,8 @@ const sortBy = (key) => {
 const datosFiltrados = computed(() => {
   let resultado = datos.value
 
-  if (search.value) {
-    const texto = search.value.toLowerCase()
+  if (buscar.value) {
+    const texto = buscar.value.toLowerCase()
     resultado = resultado.filter(item =>
       Object.values(item).some(val =>
         String(val).toLowerCase().includes(texto)

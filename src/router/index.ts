@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import PruebaView from "../views/PruebaView.vue";
 import BlogView from "../views/BlogView.vue";
+import UserEdit from "@/components/UserEdit.vue";
 
 
 
@@ -21,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "blog",
     component: BlogView,
   },
+  {
+  path: '/usuarios/editar/:id',
+  name: 'UserEdit',
+  component: () => import('@/components/UserEdit.vue'),
+},
   {
     path: "/about",
     name: "about",

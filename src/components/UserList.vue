@@ -18,6 +18,7 @@
           <th>Apellido</th>
           <th>Username</th>
           <th>Email</th>
+          <th>Fecha</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -27,8 +28,12 @@
           <td>{{ user.lastname }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
+          <td>{{ user.fecha }}</td>
           <td>
-            <button @click="deleteUser(user.id)">Editar</button>
+            <router-link :to="`/usuarios/editar/${user.id}`">
+            <button>Editar</button>
+            </router-link>
+
             <button @click="deleteUser(user.id)">Eliminar</button>
           </td>
         </tr>
@@ -37,11 +42,13 @@
     </ul>
 
     <!-- Paginación o navegación entre páginas de usuarios -->
-    <button @click="loadMore" :disabled="loading">Cargar más</button>
+   
   </div>
 </template>
 
 <script lang="ts">
+import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router';
 import { defineComponent, onMounted } from 'vue';
 import { useUserApi } from '@/composables/useUserApi';
 
@@ -56,10 +63,7 @@ export default defineComponent({
     });
 
     // Función para cargar más usuarios (paginación)
-    const loadMore = () => {
-      const nextPage = Math.floor(users.value.length / 10) + 1;
-      getUsers(nextPage);
-    };
+    
 
     // Función para eliminar un usuario
     const handleDeleteUser = (id: number) => {
@@ -72,7 +76,6 @@ export default defineComponent({
       users,
       loading,
       error,
-      loadMore,
       deleteUser: handleDeleteUser
     };
   }
